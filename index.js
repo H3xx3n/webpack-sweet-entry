@@ -16,15 +16,15 @@ function dropUnderscoreFiles(obj) {
   return returnobj;
 }
 
-function toObject(paths, ext, parentdir) {
+function toObject(paths, ext, parentdir, basedir, useUnderscoreFiles) {
   const globpaths = glob.sync(paths);
   const ret = {};
   globpaths.forEach((path) => {
-    const key = splitString(path, `/${parentdir}/`).slice(-1)[0].replace(`.${ext}`, '');
+    const key = (basedir || '') + splitString(path, `/${parentdir}/`).slice(-1)[0].replace(`.${ext}`, '');
     ret[key] = path;
   });
 
-  return dropUnderscoreFiles(ret);
+  return useUnderscoreFiles ? ret : dropUnderscoreFiles(ret);
 }
 
 module.exports = toObject;
