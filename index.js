@@ -1,30 +1,42 @@
-const glob = require('glob');
+const glob = require("glob");
 
 function splitString(stringToSplit, separator) {
   return stringToSplit.split(separator);
 }
 
 function dropUnderscoreFiles(obj) {
-  const returnobj = {};
-  Object.keys(obj).forEach(function (key) {
-    const val = this[key]; // this == obj
-    if (key.substring(0, 1) !== '_' && !key.includes('/_')) {
-      returnobj[key] = val;
-    }
-  }, obj);
-
-  return returnobj;
+  return obj.filter(e => e.substring(0, 1) !== "_" && !e.includes("/_"));
 }
 
-function toObject(paths, ext, parentdir, basedir, useUnderscoreFiles) {
-  const globpaths = glob.sync(paths);
+const defaultOptions = {
+  paths: "",
+  ext: "js",
+  parentdir: "/",
+  basedir: "",
+  useUnderscoreFiles: false,
+  keyName: ""
+};
+
+function toObject(props) {
+  const options = { ...defaultOptions, ...props };
+  const globpaths = glob.sync(options.paths);
+  const filteredPaths = options.useUnderscoreFiles
+    ? globpaths
+    : dropUnderscoreFiles(globpaths);
+  if (options.keyName) {
+    return { [(options.basedir || "") + options.keyName]: filteredPaths };
+  }
   const ret = {};
-  globpaths.forEach((path) => {
-    const key = (basedir || '') + splitString(path, `/${parentdir}/`).slice(-1)[0].replace(`.${ext}`, '');
+  filteredPaths.forEach(path => {
+    const key =
+      (options.basedir || "") +
+      splitString(path, `/${options.parentdir}/`)
+        .slice(-1)[0]
+        .replace(`.${options.ext}`, "");
     ret[key] = path;
   });
 
-  return useUnderscoreFiles ? ret : dropUnderscoreFiles(ret);
+  return ret;
 }
 
 module.exports = toObject;
