@@ -25,15 +25,15 @@ function toObject(props) {
     ? globpaths
     : dropUnderscoreFiles(globpaths);
   if (options.keyName) {
-    return { [(options.basedir || "") + options.keyName]: filteredPaths };
+    return { [(options.basedir || "") + options.keyName]: filteredPaths.map(e => path.resolve(e)) };
   }
   let ret = {};
   filteredPaths.forEach(p => {
     let key = (options.basedir || "") +
       splitString(p, `/${options.parentdir}/`)
-        .slice(-1)[0];
+      .slice(-1)[0];
     key = key.replace(path.extname(key), "");
-    ret[key] = p;
+    ret[key] = path.resolve(p);
   });
 
   return ret;
