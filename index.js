@@ -21,8 +21,6 @@ const defaultOptions = {
 function toObject(props) {
   const options = { ...defaultOptions, ...props };
   const globpaths = glob.sync(options.paths);
-  console.log(options.paths);
-  console.log(options.parentdir);
   const filteredPaths = options.useUnderscoreFiles
     ? globpaths
     : dropUnderscoreFiles(globpaths);
