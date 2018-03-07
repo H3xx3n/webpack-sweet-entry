@@ -20,20 +20,21 @@ const defaultOptions = {
 function toObject(props) {
   const options = { ...defaultOptions, ...props };
   const globpaths = glob.sync(options.paths);
+  console.log(options.paths);
+  console.log(options.parentdir);
   const filteredPaths = options.useUnderscoreFiles
     ? globpaths
     : dropUnderscoreFiles(globpaths);
   if (options.keyName) {
     return { [(options.basedir || "") + options.keyName]: filteredPaths };
   }
-  const ret = {};
-  filteredPaths.forEach(path => {
-    const key =
-      (options.basedir || "") +
-      splitString(path, `/${options.parentdir}/`)
-        .slice(-1)[0]
-        .replace(`.${options.ext}`, "");
-    ret[key] = path;
+  let ret = {};
+  filteredPaths.forEach(p => {
+    let key = (options.basedir || "") +
+      splitString(p, `/${options.parentdir}/`)
+        .slice(-1)[0];
+    key = key.replace(path.extname(key), "");
+    ret[key] = p;
   });
 
   return ret;
