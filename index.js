@@ -1,3 +1,4 @@
+const path = require("path");
 const glob = require("glob");
 
 function splitString(stringToSplit, separator) {
