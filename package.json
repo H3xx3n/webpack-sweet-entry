@@ -1,6 +1,6 @@
 {
   "name": "webpack-sweet-entry",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "Dynamic entry points / Partial files / Keep Directory Structure for webpack",
   "main": "index.js",
   "scripts": {
@@ -24,6 +24,7 @@
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "glob": "^7.1.2",
-    "jest": "^22.0.6"
+    "jest": "^22.0.6",
+    "webpack-merge": "^4.1.2"
   }
 }
